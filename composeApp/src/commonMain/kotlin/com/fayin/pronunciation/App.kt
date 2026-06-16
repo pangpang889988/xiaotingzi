@@ -1,17 +1,25 @@
-package com.fayin.pronunciation
+﻿package com.fayin.pronunciation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.fayin.pronunciation.data.repository.EntryRepository
+import com.fayin.pronunciation.data.repository.GroupRepository
+import com.fayin.pronunciation.service.phonetics.ChinesePhoneticGenerator
+import com.fayin.pronunciation.service.phonetics.EnglishPhoneticGenerator
+import com.fayin.pronunciation.service.tts.TtsService
 import com.fayin.pronunciation.ui.edit.EntryEditScreen
+import com.fayin.pronunciation.ui.edit.EntryEditViewModel
 import com.fayin.pronunciation.ui.entrylist.EntryListScreen
+import com.fayin.pronunciation.ui.entrylist.EntryListViewModel
 import com.fayin.pronunciation.ui.group.GroupListScreen
+import com.fayin.pronunciation.ui.group.GroupViewModel
 import com.fayin.pronunciation.ui.settings.VoiceSettingsScreen
+import com.fayin.pronunciation.ui.settings.VoiceSettingsViewModel
 import com.fayin.pronunciation.ui.theme.FayinTheme
 
-// Simple navigation state
 sealed class Screen {
     data object Groups : Screen()
     data class Entries(val groupId: Long, val title: String) : Screen()

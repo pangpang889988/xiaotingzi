@@ -1,4 +1,4 @@
-Ôªøpackage com.fayin.pronunciation.ui.group
+package com.fayin.pronunciation.ui.group
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,26 +49,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.fayin.pronunciation.ui.theme.GroupColors
-import org.koin.core.context.GlobalContext
 
-fun groupViewModel(): GroupViewModel = GlobalContext.get().get()
 
 @Composable
 fun GroupListScreen(
     onGroupClick: (Long, String) -> Unit,
     onSettingsClick: () -> Unit = {},
-    viewModel: GroupViewModel = groupViewModel()
+    viewModel: GroupViewModel = remember { GroupViewModel(com.fayin.pronunciation.Dependencies.groupRepository) }
 ) {
     LaunchedEffect(Unit) { viewModel.load() }
     val groups by viewModel.groups.collectAsState()
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
             Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(top = 8.dp)) {
-                Text("ÂèØÂè£ÂèØ‰πê", style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(start = 20.dp, top = 8.dp))
+                Text("ø…ø⁄ø…¿÷", style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(start = 20.dp, top = 8.dp))
                 Row(Modifier.align(Alignment.TopEnd).padding(end = 4.dp, top = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = { viewModel.shuffleGroups() }) { Icon(Icons.Default.Shuffle, "ÈöèÊú∫ÊéíÂàó", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) }
-                    IconButton(onClick = onSettingsClick) { Icon(Icons.Default.Settings, "ËÆæÁΩÆ", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(24.dp)) }
-                    IconButton(onClick = { viewModel.showCreate() }) { Icon(Icons.Default.Add, "Êñ∞Âª∫ÂàÜÁªÑ", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) }
+                    IconButton(onClick = { viewModel.shuffleGroups() }) { Icon(Icons.Default.Shuffle, "ÀÊª˙≈≈¡–", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) }
+                    IconButton(onClick = onSettingsClick) { Icon(Icons.Default.Settings, "…Ë÷√", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(24.dp)) }
+                    IconButton(onClick = { viewModel.showCreate() }) { Icon(Icons.Default.Add, "–¬Ω®∑÷◊È", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) }
                 }
             }
             Box(Modifier.fillMaxWidth().height(0.5.dp).background(MaterialTheme.colorScheme.outline))
@@ -76,8 +74,8 @@ fun GroupListScreen(
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Default.Book, null, Modifier.size(56.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
-                        Spacer(Modifier.height(12.dp)); Text("ËøòÊ≤°ÊúâÂàÜÁªÑ", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
-                        Spacer(Modifier.height(4.dp)); Text("ÁÇπÂáªÂè≥‰∏äËßí + Êñ∞Âª∫ÂàÜÁªÑ", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+                        Spacer(Modifier.height(12.dp)); Text("ªπ√ª”–∑÷◊È", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                        Spacer(Modifier.height(4.dp)); Text("µ„ª˜”“…œΩ« + –¬Ω®∑÷◊È", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
                     }
                 }
             } else {
@@ -91,11 +89,11 @@ fun GroupListScreen(
                                 Column(Modifier.weight(1f)) {
                                     Text(group.title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis, fontWeight = FontWeight.Normal)
                                     Spacer(Modifier.height(2.dp))
-                                    Text("ÂàõÂª∫‰∫é${group.createdAt}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                                    Text("¥¥Ω®”⁄${group.createdAt}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                                 }
                                 Spacer(Modifier.width(8.dp))
-                                IconButton(onClick = { viewModel.requestRename(group) }, modifier = Modifier.size(32.dp)) { Icon(Icons.Default.Edit, "ÈáçÂëΩÂêç", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) }
-                                IconButton(onClick = { viewModel.requestDelete(group) }, modifier = Modifier.size(32.dp)) { Icon(Icons.Default.Delete, "Âà†Èô§", tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f), modifier = Modifier.size(18.dp)) }
+                                IconButton(onClick = { viewModel.requestRename(group) }, modifier = Modifier.size(32.dp)) { Icon(Icons.Default.Edit, "÷ÿ√¸√˚", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) }
+                                IconButton(onClick = { viewModel.requestDelete(group) }, modifier = Modifier.size(32.dp)) { Icon(Icons.Default.Delete, "…æ≥˝", tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f), modifier = Modifier.size(18.dp)) }
                                 Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.outline, modifier = Modifier.size(16.dp))
                             }
                             if (!isLast) Box(Modifier.fillMaxWidth().padding(start = 66.dp).height(0.5.dp).background(MaterialTheme.colorScheme.outline))
@@ -106,18 +104,19 @@ fun GroupListScreen(
         }
     }
     if (viewModel.showCreateDialog) { var t by remember { mutableStateOf("") }
-        AlertDialog(onDismissRequest = { viewModel.hideCreate() }, title = { Text("Êñ∞Âª∫ÂàÜÁªÑ") },
-            text = { OutlinedTextField(t, { t = it }, label = { Text("ÂàÜÁªÑÂêçÁß∞") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)) },
-            confirmButton = { TextButton({ viewModel.createGroup(t) }, enabled = t.isNotBlank()) { Text("ÂàõÂª∫") } },
-            dismissButton = { TextButton({ viewModel.hideCreate() }) { Text("ÂèñÊ∂à") } }) }
+        AlertDialog(onDismissRequest = { viewModel.hideCreate() }, title = { Text("–¬Ω®∑÷◊È") },
+            text = { OutlinedTextField(t, { t = it }, label = { Text("∑÷◊È√˚≥∆") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)) },
+            confirmButton = { TextButton({ viewModel.createGroup(t) }, enabled = t.isNotBlank()) { Text("¥¥Ω®") } },
+            dismissButton = { TextButton({ viewModel.hideCreate() }) { Text("»°œ˚") } }) }
     if (viewModel.showRenameDialog && viewModel.renameTarget != null) { var t by remember { mutableStateOf(viewModel.renameTarget!!.title) }
-        AlertDialog(onDismissRequest = { viewModel.hideRename() }, title = { Text("ÈáçÂëΩÂêçÂàÜÁªÑ") },
-            text = { OutlinedTextField(t, { t = it }, label = { Text("ÂàÜÁªÑÂêçÁß∞") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)) },
-            confirmButton = { TextButton({ viewModel.renameGroup(viewModel.renameTarget!!.id, t) }, enabled = t.isNotBlank()) { Text("Á°ÆÂÆö") } },
-            dismissButton = { TextButton({ viewModel.hideRename() }) { Text("ÂèñÊ∂à") } }) }
+        AlertDialog(onDismissRequest = { viewModel.hideRename() }, title = { Text("÷ÿ√¸√˚∑÷◊È") },
+            text = { OutlinedTextField(t, { t = it }, label = { Text("∑÷◊È√˚≥∆") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary)) },
+            confirmButton = { TextButton({ viewModel.renameGroup(viewModel.renameTarget!!.id, t) }, enabled = t.isNotBlank()) { Text("»∑∂®") } },
+            dismissButton = { TextButton({ viewModel.hideRename() }) { Text("»°œ˚") } }) }
     if (viewModel.showDeleteConfirm && viewModel.deleteTarget != null) {
         AlertDialog(onDismissRequest = { viewModel.hideDelete() },
-            confirmButton = { TextButton({ viewModel.confirmDelete(viewModel.deleteTarget!!.id) }) { Text("Âà†Èô§", color = MaterialTheme.colorScheme.error) } },
-            dismissButton = { TextButton({ viewModel.hideDelete() }) { Text("ÂèñÊ∂à") } },
-            title = { Text("Âà†Èô§ÂàÜÁªÑ") }, text = { Text("Á°ÆÂÆöË¶ÅÂà†Èô§„Äå${viewModel.deleteTarget!!.title}„ÄçÂêóÔºü") }) }
+            confirmButton = { TextButton({ viewModel.confirmDelete(viewModel.deleteTarget!!.id) }) { Text("…æ≥˝", color = MaterialTheme.colorScheme.error) } },
+            dismissButton = { TextButton({ viewModel.hideDelete() }) { Text("»°œ˚") } },
+            title = { Text("…æ≥˝∑÷◊È") }, text = { Text("»∑∂®“™…æ≥˝°∏${viewModel.deleteTarget!!.title}°π¬£ø") }) }
 }
+

@@ -1,4 +1,4 @@
-package com.fayin.pronunciation.ui.edit
+﻿package com.fayin.pronunciation.ui.edit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,19 +27,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.koin.core.context.GlobalContext
-
-fun entryEditViewModel(): EntryEditViewModel = GlobalContext.get().get()
+import com.fayin.pronunciation.Dependencies
 
 @Composable
 fun EntryEditScreen(
     groupId: Long, entryId: Long?, onSaved: () -> Unit, onBack: () -> Unit,
-    viewModel: EntryEditViewModel = entryEditViewModel()
+    viewModel: EntryEditViewModel = remember {
+        EntryEditViewModel(Dependencies.entryRepository, Dependencies.ttsService,
+            Dependencies.chinesePhoneticGenerator, Dependencies.englishPhoneticGenerator)
+    }
 ) {
     LaunchedEffect(groupId) { viewModel.setGroup(groupId) }
     LaunchedEffect(entryId) { if (entryId != null) viewModel.loadEntry(entryId) }

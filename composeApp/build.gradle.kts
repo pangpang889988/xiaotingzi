@@ -1,4 +1,4 @@
-plugins {
+﻿plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
@@ -24,13 +24,11 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.materialIconsExtended)
-            implementation(libs.koin.core)
             implementation(libs.sqldelight.coroutines)
             implementation(libs.kotlinx.coroutines.core)
         }
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
-            implementation(libs.koin.android)
             implementation(libs.sqldelight.android.driver)
             implementation(libs.tinypinyin)
         }

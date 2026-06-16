@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,14 +42,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.koin.core.context.GlobalContext
+import com.fayin.pronunciation.Dependencies
 
-fun entryListViewModel(): EntryListViewModel = GlobalContext.get().get()
 
 @Composable
 fun EntryListScreen(
     groupId: Long, groupTitle: String, onAddEntry: () -> Unit, onEditEntry: (Long) -> Unit, onBack: () -> Unit,
-    viewModel: EntryListViewModel = entryListViewModel()
+    viewModel: EntryListViewModel = remember { EntryListViewModel(Dependencies.entryRepository, Dependencies.ttsService) }
 ) {
     LaunchedEffect(groupId) { viewModel.loadGroup(groupId) }
     val entries by viewModel.entries.collectAsState()
@@ -58,18 +58,18 @@ fun EntryListScreen(
             Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background).padding(horizontal = 4.dp, vertical = 8.dp)) {
                 Row(Modifier.align(Alignment.CenterStart).clickable(onClick = onBack).padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
-                    Spacer(Modifier.width(2.dp)); Text("ËøîÂõû", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary, fontSize = 17.sp)
+                    Spacer(Modifier.width(2.dp)); Text("∑µªÿ", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary, fontSize = 17.sp)
                 }
                 Text(groupTitle, style = MaterialTheme.typography.displayLarge, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp, top = 44.dp))
-                IconButton(onClick = onAddEntry, modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp)) { Icon(Icons.Default.Add, "Ê∑ªÂä†Êù°ÁõÆ", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) }
+                IconButton(onClick = onAddEntry, modifier = Modifier.align(Alignment.TopEnd).padding(top = 4.dp)) { Icon(Icons.Default.Add, "ÃÌº”Ãıƒø", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp)) }
             }
             Box(Modifier.fillMaxWidth().height(0.5.dp).background(MaterialTheme.colorScheme.outline))
             if (entries.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Default.VolumeUp, null, Modifier.size(56.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
-                        Spacer(Modifier.height(12.dp)); Text("ËøòÊ≤°ÊúâÊù°ÁõÆ", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
-                        Spacer(Modifier.height(4.dp)); Text("ÁÇπÂáªÂè≥‰∏äËßí + Ê∑ªÂä†Â≠¶‰π†ÂÜÖÂÆπ", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+                        Spacer(Modifier.height(12.dp)); Text("ªπ√ª”–Ãıƒø", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
+                        Spacer(Modifier.height(4.dp)); Text("µ„ª˜”“…œΩ« + ÃÌº”—ßœ∞ƒ⁄»›", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
                     }
                 }
             } else {
@@ -87,11 +87,11 @@ fun EntryListScreen(
                                 }
                                 Spacer(Modifier.width(8.dp))
                                 Box(Modifier.clip(RoundedCornerShape(4.dp)).background(if (entry.language == "zh") MaterialTheme.colorScheme.primary.copy(alpha = 0.1f) else MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f)).padding(horizontal = 6.dp, vertical = 2.dp)) {
-                                    Text(if (entry.language == "zh") "‰∏≠" else "EN", style = MaterialTheme.typography.labelSmall, color = if (entry.language == "zh") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
+                                    Text(if (entry.language == "zh") "÷–" else "EN", style = MaterialTheme.typography.labelSmall, color = if (entry.language == "zh") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Bold)
                                 }
                                 Spacer(Modifier.width(4.dp))
-                                IconButton(onClick = { onEditEntry(entry.id) }, modifier = Modifier.size(32.dp)) { Icon(Icons.Default.Edit, "ÁºñËæë", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) }
-                                IconButton(onClick = { viewModel.speak(entry) }, modifier = Modifier.size(36.dp)) { Icon(Icons.Default.VolumeUp, "ÊúóËØª", tint = if (isSpeaking == entry.id) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(20.dp)) }
+                                IconButton(onClick = { onEditEntry(entry.id) }, modifier = Modifier.size(32.dp)) { Icon(Icons.Default.Edit, "±‡º≠", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) }
+                                IconButton(onClick = { viewModel.speak(entry) }, modifier = Modifier.size(36.dp)) { Icon(Icons.Default.VolumeUp, "¿ ∂¡", tint = if (isSpeaking == entry.id) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(20.dp)) }
                             }
                             if (!isLast) Box(Modifier.fillMaxWidth().padding(start = 16.dp).height(0.5.dp).background(MaterialTheme.colorScheme.outline))
                         }
@@ -102,8 +102,8 @@ fun EntryListScreen(
     }
     if (viewModel.showDeleteConfirm && viewModel.deleteTarget != null) {
         AlertDialog(onDismissRequest = { viewModel.hideDelete() },
-            confirmButton = { TextButton({ viewModel.confirmDelete(viewModel.deleteTarget!!.id) }) { Text("Âà†Èô§", color = MaterialTheme.colorScheme.error) } },
-            dismissButton = { TextButton({ viewModel.hideDelete() }) { Text("ÂèñÊ∂à") } },
-            title = { Text("Âà†Èô§Êù°ÁõÆ") }, text = { Text("Á°ÆÂÆöË¶ÅÂà†Èô§„Äå${viewModel.deleteTarget!!.title}„ÄçÂêóÔºü") })
-    }
+            confirmButton = { TextButton({ viewModel.confirmDelete(viewModel.deleteTarget!!.id) }) { Text("…æ≥˝", color = MaterialTheme.colorScheme.error) } },
+            dismissButton = { TextButton({ viewModel.hideDelete() }) { Text("»°œ˚") } },
+            title = { Text("…æ≥˝Ãıƒø") }, text = { Text("»∑∂®“™…æ≥˝°∏${viewModel.deleteTarget!!.title}°π¬£ø") }) }
 }
+

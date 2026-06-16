@@ -1,4 +1,4 @@
-package com.fayin.pronunciation.ui.settings
+﻿package com.fayin.pronunciation.ui.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,18 +24,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.koin.core.context.GlobalContext
-
-fun voiceSettingsViewModel(): VoiceSettingsViewModel = GlobalContext.get().get()
+import com.fayin.pronunciation.Dependencies
 
 @Composable
-fun VoiceSettingsScreen(onBack: () -> Unit, viewModel: VoiceSettingsViewModel = voiceSettingsViewModel()) {
+fun VoiceSettingsScreen(onBack: () -> Unit, viewModel: VoiceSettingsViewModel = remember {
+    VoiceSettingsViewModel(Dependencies.ttsService)
+}) {
+    LaunchedEffect(Unit) { viewModel.load() }
     val voices = viewModel.voices; val selectedVoiceId = viewModel.selectedVoiceId
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
