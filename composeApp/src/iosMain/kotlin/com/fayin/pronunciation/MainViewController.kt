@@ -8,8 +8,11 @@ import com.fayin.pronunciation.service.phonetics.EnglishPhoneticGenerator
 import com.fayin.pronunciation.service.tts.PlatformTtsEngine
 import com.fayin.pronunciation.service.tts.TtsService
 
+private var initialized = false
+
 fun MainViewController() = ComposeUIViewController {
-    if (!::Dependencies.groupRepository.isInitialized) {
+    if (!initialized) {
+        initialized = true
         val driver = DatabaseDriverFactory().createDriver()
         val db = com.fayin.pronunciation.db.PronunciationDatabase(driver)
         val chinese = ChinesePhoneticGenerator()
