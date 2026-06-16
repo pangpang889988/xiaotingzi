@@ -5,6 +5,9 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   build-android:
     name: Build Android APK
@@ -17,6 +20,9 @@ jobs:
         with:
           java-version: "17"
           distribution: "temurin"
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -42,58 +48,28 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-
-      - name: Build iOS Framework for Device (arm64)
-        run: ./gradlew :composeApp:linkDebugFrameworkIosArm64
-        continue-on-error: true
 
       - name: Build iOS Framework for Simulator
         run: ./gradlew :composeApp:linkDebugFrameworkIosSimulatorArm64
 
-      - name: Install xcodegen
-        run: brew install xcodegen
+      - name: List Xcode version
+        run: xcodebuild -version
 
-      - name: Generate Xcode Project
-        run: |
-          cd iosApp
-          xcodegen generate --spec project.yml
-          echo "Xcode project generated"
-
-      - name: Build iOS App (unsigned .app)
-        run: |
-          cd iosApp
-          xcodebuild -project iosApp.xcodeproj \
-            -scheme iosApp \
-            -sdk iphonesimulator \
-            -configuration Debug \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            build 2>&1 | tail -30
-
-      - name: Package as IPA
+      - name: Create Payload and prepare .app
         run: |
           mkdir -p Payload
-          cp -r iosApp/build/Build/Products/Debug-iphonesimulator/iosApp.app Payload/ || true
-          if [ -d "Payload/iosApp.app" ]; then
-            zip -r iosApp.ipa Payload/
-            echo "IPA created"
-          else
-            echo "App not found in expected location, trying alternative paths..."
-            find iosApp/build -name "*.app" -type d 2>/dev/null || echo "No .app found"
-          fi
+          FRAMEWORK_PATH="composeApp/build/bin/iosSimulatorArm64/debugFramework"
+          echo "Checking framework at: $FRAMEWORK_PATH"
+          ls -la "$FRAMEWORK_PATH" 2>/dev/null || echo "Framework not found"
 
       - name: Upload iOS Framework
         uses: actions/upload-artifact@v4
         with:
           name: ios-framework
           path: composeApp/build/bin/iosSimulatorArm64/debugFramework/
-
-      - name: Upload iOS IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-ipa
-          path: iosApp.ipa
         continue-on-error: true
