@@ -1,4 +1,4 @@
-package com.fayin.pronunciation.ui.group
+﻿package com.fayin.pronunciation.ui.group
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +59,7 @@ fun GroupListScreen(
     onSettingsClick: () -> Unit = {},
     viewModel: GroupViewModel = groupViewModel()
 ) {
+    LaunchedEffect(Unit) { viewModel.load() }
     val groups by viewModel.groups.collectAsState()
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
@@ -89,7 +91,7 @@ fun GroupListScreen(
                                 Column(Modifier.weight(1f)) {
                                     Text(group.title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis, fontWeight = FontWeight.Normal)
                                     Spacer(Modifier.height(2.dp))
-                                    Text("创建于 ${group.createdAt}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                                    Text("创建于${group.createdAt}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                                 }
                                 Spacer(Modifier.width(8.dp))
                                 IconButton(onClick = { viewModel.requestRename(group) }, modifier = Modifier.size(32.dp)) { Icon(Icons.Default.Edit, "重命名", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp)) }

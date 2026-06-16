@@ -55,17 +55,39 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build iOS Framework for Simulator
-        run: ./gradlew :composeApp:linkDebugFrameworkIosSimulatorArm64
+        run: ./gradlew :composeApp:linkDebugFrameworkIosSimulatorArm64 --stacktrace 2>&1
+        continue-on-error: true
 
-      - name: List Xcode version
-        run: xcodebuild -version
+      - name: Show full Gradle error log
+        run: |
+          echo "=== Checking build output ==="
+          ls -la composeApp/build/bin/iosSimulatorArm64/ 2>/dev/null || echo "No sim framework output"
+          ls -la composeApp/build/reports/ 2>/dev/null || echo "No reports"
+          find composeApp/build -name "*.log" -o -name "*.txt" 2>/dev/null | head -10
+          echo "=== Gradle scanned logs ==="
+          find . -path "*/build/reports/*" -name "*.html" 2>/dev/null | head -5
 
-      - name: Create Payload and prepare .app
+      - name: Upload logs if failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-gradle-logs
+          path: |
+            composeApp/build/reports/
+            .gradle/8.5/executionHistory/
+          continue-on-error: true
+
+      - name: Create Payload
         run: |
           mkdir -p Payload
           FRAMEWORK_PATH="composeApp/build/bin/iosSimulatorArm64/debugFramework"
-          echo "Checking framework at: $FRAMEWORK_PATH"
-          ls -la "$FRAMEWORK_PATH" 2>/dev/null || echo "Framework not found"
+          if [ -d "$FRAMEWORK_PATH" ]; then
+            echo "Framework exists!"
+            ls -la "$FRAMEWORK_PATH"
+          else
+            echo "Framework not found"
+            find composeApp/build/bin -type d 2>/dev/null
+          fi
 
       - name: Upload iOS Framework
         uses: actions/upload-artifact@v4

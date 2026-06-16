@@ -26,3 +26,6 @@ launch_as.bat
 app/build
 composeApp/build
 iosApp/build
+
+# Old Android app (replaced by composeApp)
+/app/
